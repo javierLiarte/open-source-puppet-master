@@ -616,7 +616,7 @@ if [ ${VERBOSE} -gt 1 ]; then
   ${ECHO} "${puppetize}" | ${TEE} ${LOG}
 fi
 if [ ${VERBOSE} -gt 0 ]; then
-  ${puppetize} &>1 | ${TEE} ${LOG}
+  ${puppetize} 2>&1 | ${TEE} ${LOG}
 else
   ${puppetize} >> ${LOG}
 fi
