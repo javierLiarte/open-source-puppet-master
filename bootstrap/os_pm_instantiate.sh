@@ -251,8 +251,8 @@ eval_osversion ()
       ;;
     esac
     ;;
-    debian)
-      case "${OSVERSION}" in
+    Debian)
+    case "${OSVERSION}" in
       6.0)
       # good
       ;;
@@ -447,6 +447,7 @@ case ${OS} in
     REPOUPDATE="${REPOSEXEC} update"
     PKGINSTALL="${REPOSEXEC} install -y"
     BASEPACKAGES=("puppet-common" "git-core")
+    ;;
   *)
     # Final fallback
     ${ECHO} "${cc_red}${OS} not supported. Exiting!${cc_normal}" | ${TEE} ${LOG}
