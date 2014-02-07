@@ -10,6 +10,7 @@
 # === Authors
 #
 # Bernd Weber <mailto:bernd@nvisionary.com>
+# Javier Liarte <mailto:jliarte@gmail.com> - Modifying to get working on debian
 #
 class puppet::params {
   $confdir          = '/etc/puppet'
@@ -94,7 +95,7 @@ class puppet::params {
   $puppetdb_server_name     = $::fqdn
 
   case $::operatingsystem {
-    'Ubuntu' : {
+    'Ubuntu', 'Debian' : {
       $puppet_packages    = [ 'puppet' ]
       $master_packages    = {
         'self'   => 'puppetmaster',
