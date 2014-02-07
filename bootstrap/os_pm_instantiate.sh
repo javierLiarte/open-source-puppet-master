@@ -429,7 +429,7 @@ case ${OS} in
     PKGINSTALL="${REPOSEXEC} install -y"
     BASEPACKAGES=("puppet-common" "git-core")
     ;;
-  debian) # TODO: extract common values out of case
+  Debian) # TODO: extract common values out of case
     REPOPATH="apt.puppetlabs.com"
     REPOFILEBASE="puppetlabs-release"
     case "${OSVERSION}" in
