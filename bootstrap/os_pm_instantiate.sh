@@ -43,7 +43,7 @@ PUPPETINSTALLCONFIG="modules/puppet/tests/bootstrap.pp"
 LOGDIR="/var/log"
 LOGFILE="pm_instantiate.log"
 LOG="${LOGDIR}/${LOGFILE}"
-GITHUBREPO="https://github.com/berndmweber/open-source-puppet-master.git"
+GITHUBREPO="https://github.com/javierLiarte/open-source-puppet-master.git"
 TEMPPUPPETDIR="puppet"
 VERBOSE=0
 CURRENT_DATE=`${DATE}`
@@ -63,7 +63,7 @@ usage ()
   ${ECHO} "  --help                              This usage information"
   ${ECHO}
   ${ECHO} " ${cc_blue}Auto-detected options. These do not normally have to be provided.${cc_normal}"
-  ${ECHO} "  --os [${cc_yellow}Ubuntu${cc_normal}|${cc_yellow}CentOS${cc_normal}]"
+  ${ECHO} "  --os [${cc_yellow}Debian${cc_normal}|${cc_yellow}Ubuntu${cc_normal}|${cc_yellow}CentOS${cc_normal}]"
   ${ECHO} "  --osversion [${cc_yellow}12.04${cc_normal}|${cc_yellow}6${cc_normal}]"
   ${ECHO}
   ${ECHO} " e.g. ${0} --os Ubuntu --osversion 12.04 --logdir /tmp --logfile mylog.txt --verbose 2"
@@ -153,6 +153,9 @@ eval_issue_os ()
       Ubuntu)
         OS="ubuntu"
         ;;
+      Debian)
+        OS="debian"
+        ;;
       CentOS)
         OS="centos"
         ;;
@@ -183,6 +186,12 @@ eval_issue_osversion ()
           ${ECHO} "${cc_yellow}version \$3: ${3}${cc_normal}" | ${TEE} ${LOG}
         fi
         ;;
+      Debian)
+        OSVERSION="${2:0:3}"
+        if [ ${VERBOSE} -gt 1 ]; then
+          ${ECHO} "${cc_yellow}version \$3: ${3}${cc_normal}" | ${TEE} ${LOG}
+        fi
+        ;;
       *)
         exit 0
         ;;
@@ -204,6 +213,11 @@ eval_os ()
     OS="ubuntu"
     ;;
     ubuntu)
+    # good
+    ;;
+    Debian)
+    ;;
+    debian)
     # good
     ;;
     CentOS)
@@ -230,6 +244,19 @@ eval_osversion ()
     ubuntu)
     case "${OSVERSION}" in
       12.04)
+      # good
+      ;;
+      *)
+        return 0
+      ;;
+    esac
+    ;;
+    debian)
+      case "${OSVERSION}" in
+      6.0)
+      # good
+      ;;
+      7.0)
       # good
       ;;
       *)
@@ -402,6 +429,24 @@ case ${OS} in
     PKGINSTALL="${REPOSEXEC} install -y"
     BASEPACKAGES=("puppet-common" "git-core")
     ;;
+  debian) # TODO: extract common values out of case
+    REPOPATH="apt.puppetlabs.com"
+    REPOFILEBASE="puppetlabs-release"
+    case "${OSVERSION}" in
+      6.0)
+      REPOFILE="${REPOFILEBASE}-squeeze.deb"
+      ;;
+      7.0)
+      REPOFILE="${REPOFILEBASE}-wheezy.deb"
+      ;;
+    esac
+    REPOINSTALL="dpkg -i"
+    REPOCHECK="dpkg --list"
+    REPOINSTCHECK="ii  "
+    REPOSEXEC="apt-get"
+    REPOUPDATE="${REPOSEXEC} update"
+    PKGINSTALL="${REPOSEXEC} install -y"
+    BASEPACKAGES=("puppet-common" "git-core")
   *)
     # Final fallback
     ${ECHO} "${cc_red}${OS} not supported. Exiting!${cc_normal}" | ${TEE} ${LOG}
