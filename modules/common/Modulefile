@@ -1,0 +1,8 @@
+name 'javierLiarte-common'
+version '1.1.4'
+source 'git://github.com/javierLiarte/open-source-puppet-master.git'
+author 'javierLiarte'
+license 'Apache Version 2.0'
+summary 'Puppet Open Source from Bernd Weber common module'
+description 'Open Source Puppet Master common files'
+project_page 'https://github.com/javierLiarte/open-source-puppet-master'
